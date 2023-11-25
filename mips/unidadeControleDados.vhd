@@ -19,7 +19,7 @@ architecture comportamento of unidadeControleDados is
 	 constant JMP : std_logic_vector(5 downto 0) := "000010";
 	 
     begin
-			sinais_controle <= "011010000" when opcode = R   else
+			sinal_controle  <= "011010000" when opcode = R   else
 									 "001101010" when opcode = LW  else
 									 "000101001" when opcode = SW  else
 									 "000000100" when opcode = BEQ else
