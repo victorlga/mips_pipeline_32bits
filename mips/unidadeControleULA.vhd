@@ -15,11 +15,12 @@ architecture comportamento of unidadeControleULA is
 	 signal funct_dec : std_logic_vector(3 downto 0);
 	 signal opcode_dec : std_logic_vector(3 downto 0);
 	 
-	 constant ANND: std_logic_vector(5 downto 0) := "";
-	 constant ORR : std_logic_vector(5 downto 0) := "";
-	 constant ADD : std_logic_vector(5 downto 0) := "";
-	 constant SUB : std_logic_vector(5 downto 0) := "";
-	 constant SLT : std_logic_vector(5 downto 0) := "";
+	 constant ANND: std_logic_vector(5 downto 0) := "100100";
+	 constant ORR : std_logic_vector(5 downto 0) := "100101";
+	 constant ADD : std_logic_vector(5 downto 0) := "100000";
+	 constant SUB : std_logic_vector(5 downto 0) := "100010";
+	 constant SLT : std_logic_vector(5 downto 0) := "101010";
+	 constant NORR: std_logic_vector(5 downto 0) := "100111";
 	 
 	 constant LW  : std_logic_vector(5 downto 0) := "100011";
 	 constant SW  : std_logic_vector(5 downto 0) := "101011";
@@ -34,6 +35,7 @@ architecture comportamento of unidadeControleULA is
 							  "0010" when funct = ADD  else
 							  "0110" when funct = SUB  else
 							  "0111" when funct = SLT  else
+							  "1100" when funct = NORR else
 							  "0000";
 							  
 			opcode_dec <= "0010" when opcode = LW  else
