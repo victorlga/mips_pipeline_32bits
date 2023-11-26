@@ -12,11 +12,11 @@ architecture comportamento of unidadeControleDados is
 
 	 constant R   : std_logic_vector(5 downto 0) := "000000";
 	 
-	 constant LW  : std_logic_vector(5 downto 0) := "100011";
-	 constant SW  : std_logic_vector(5 downto 0) := "101011";
-	 constant BEQ : std_logic_vector(5 downto 0) := "000100";
+	 constant LW  : std_logic_vector(5 downto 0) := 6x"23";
+	 constant SW  : std_logic_vector(5 downto 0) := 6x"2b";
+	 constant BEQ : std_logic_vector(5 downto 0) := 6x"4";
 	 
-	 constant JMP : std_logic_vector(5 downto 0) := "000010";
+	 constant JMP : std_logic_vector(5 downto 0) := 6x"2";
 	 
     begin
 			sinal_controle  <= "011010000" when opcode = R   else
