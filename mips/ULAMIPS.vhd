@@ -919,8 +919,8 @@ architecture comportamento of ULAMIPS is
                            sum_sub_op_31 when (seletor(1 downto 0) = "10") else
                            slt_op_31;
 			
-		  overflow <= std_logic((carry_in_31 xor carry_out_30) xor sum_sub_op_31);
+		  overflow <= (carry_in_31 xor carry_out_30) xor sum_sub_op_31;
     
 		  saida <= saida_intermed;
-		  zero 	  <= std_logic(not (saida_intermed(0) or saida_intermed(1) or saida_intermed(2) or saida_intermed(3) or saida_intermed(4) or saida_intermed(5) or saida_intermed(6) or saida_intermed(7) or saida_intermed(8) or saida_intermed(9) or saida_intermed(10) or saida_intermed(11) or saida_intermed(12) or saida_intermed(13) or saida_intermed(14) or saida_intermed(15) or saida_intermed(16) or saida_intermed(17) or saida_intermed(18) or saida_intermed(19) or saida_intermed(20) or saida_intermed(21) or saida_intermed(22) or saida_intermed(23) or saida_intermed(24) or saida_intermed(25) or saida_intermed(26) or saida_intermed(27) or saida_intermed(28) or saida_intermed(29) or saida_intermed(30) or saida_intermed(31)));
+		  zero 	  <= not (saida_intermed(0) or saida_intermed(1) or saida_intermed(2) or saida_intermed(3) or saida_intermed(4) or saida_intermed(5) or saida_intermed(6) or saida_intermed(7) or saida_intermed(8) or saida_intermed(9) or saida_intermed(10) or saida_intermed(11) or saida_intermed(12) or saida_intermed(13) or saida_intermed(14) or saida_intermed(15) or saida_intermed(16) or saida_intermed(17) or saida_intermed(18) or saida_intermed(19) or saida_intermed(20) or saida_intermed(21) or saida_intermed(22) or saida_intermed(23) or saida_intermed(24) or saida_intermed(25) or saida_intermed(26) or saida_intermed(27) or saida_intermed(28) or saida_intermed(29) or saida_intermed(30) or saida_intermed(31));
 end architecture;

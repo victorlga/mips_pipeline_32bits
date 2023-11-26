@@ -7,10 +7,21 @@ entity mips is
             simulacao : boolean := TRUE -- para gravar na placa, altere de TRUE para FALSE
   );
   port   (
-    CLOCK_50 : in std_logic;
-    KEY: in std_logic_vector(larguraDados-1 downto 0);
-    SW: in std_logic_vector(9 downto 0);
-    LEDR  : out std_logic_vector(9 downto 0)
+    CLOCK_50 : in std_logic; -- clock de 50 MHz
+	 FPGA_RESET_N : in std_logic; -- botão de reset
+    KEY : in std_logic_vector(3 downto 0); -- 4 botões
+	 SW : in std_logic_vector(9 downto 0); -- 10 chaves
+	 
+	 LEDR : out std_logic_vector(9 downto 0); -- 10 leds
+	
+	-- 6 displays de 7 segmentos
+	--ROM_AddressOUT : out std_logic_vector(addrWidth - 1 downto 0);
+	 HEX0: out std_logic_vector(6 downto 0);
+	 HEX1: out std_logic_vector(6 downto 0);
+	 HEX2: out std_logic_vector(6 downto 0);
+	 HEX3: out std_logic_vector(6 downto 0);
+	 HEX4: out std_logic_vector(6 downto 0);
+	 HEX5: out std_logic_vector(6 downto 0)
   );
 end entity;
 
@@ -25,9 +36,9 @@ architecture arquitetura of mips is
 	signal EndMais4 : std_logic_vector (larguraDados-1 downto 0);
 	signal EndMais4MaisImShft : std_logic_vector (larguraDados-1 downto 0);
 	signal SigExtIm : std_logic_vector (larguraDados-1 downto 0);
-	alias SigExtImShft : std_logic_vector (larguraDados-1 downto 0) is std_logic_vector(SigExtIm(29 downto 0) & "00");
+	signal SigExtImShft : std_logic_vector (larguraDados-1 downto 0);
 	
-	alias zeroANDbeq : std_logic is std_logic(bed and zero);
+	signal zeroANDbeq : std_logic;
 	
 	signal zero : std_logic;
 	signal ULASaida : std_logic_vector (larguraDados-1 downto 0);
@@ -36,41 +47,45 @@ architecture arquitetura of mips is
 	
 	signal endReg3 : std_logic_vector (4 downto 0);
 	
-	alias opcode : std_logic_vector (5 downto 0) is ROMsaida(31 downto 26);
-	alias endRegRS : std_logic_vector (4 downto 0) is ROMsaida(25 downto 21);
-	alias endRegRT : std_logic_vector (4 downto 0) is ROMsaida(20 downto 16);
-	alias endRegRD : std_logic_vector (4 downto 0) is ROMsaida(15 downto 11);
-	alias shant : std_logic_vector (4 downto 0) is ROMsaida(10 downto 6);
-	alias funct : std_logic_vector (4 downto 0) is ROMsaida(5 downto 0);
+	signal opcode 	 : std_logic_vector (5 downto 0);
+	signal endRegRS : std_logic_vector (4 downto 0);
+	signal endRegRT : std_logic_vector (4 downto 0);
+	signal endRegRD : std_logic_vector (4 downto 0);
+	signal shant 	 : std_logic_vector (4 downto 0);
+	signal funct  	 : std_logic_vector (5 downto 0);
 	
-	alias Imediato26 : std_logic_vector (25 downto 0) is ROMsaida(25 downto 0);
-	alias Imediato26Shft : std_logic_vector (27 downto 0) is std_logic_vector(Imediato26 & "00");
+	signal Imediato26 : std_logic_vector (25 downto 0);
+	signal Imediato26Shft : std_logic_vector (27 downto 0);
 	
-	alias Imediato16 : std_logic_vector (15 downto 0) is ROMsaida(15 downto 0);
+	signal Imediato16 : std_logic_vector (15 downto 0);
 	
 	
 	signal entradaAMuxProxPC : std_logic_vector (larguraDados-1 downto 0);
-	alias entradaBMuxProxPC : std_logic_vector (larguraDados-1 downto 0) is std_logic_vector(EndMais4(31 downto 28) & Imediato26Shft);
-	alias selMuxProxPC : std_logic is sinal_controle(8);
+	signal entradaBMuxProxPC : std_logic_vector (larguraDados-1 downto 0);
+	signal selMuxProxPC : std_logic;
 	
-	alias selMuxRTRD : std_logic is sinal_controle(7);
-	alias habEscritaReg : std_logic is sinal_controle(6);
+	signal selMuxRTRD : std_logic;
+	signal habEscritaReg : std_logic;
 	
 	signal dadoEscritaReg3 : std_logic_vector (larguraDados-1 downto 0);
 	signal dadoLidoReg1 : std_logic_vector (larguraDados-1 downto 0);
 	signal dadoLidoReg2 : std_logic_vector (larguraDados-1 downto 0);
 	signal entradaB_ULA : std_logic_vector (larguraDados-1 downto 0);
 	
-	alias selMuxRegSig : std_logic is sinal_controle(5);
-	alias selMuxULARAM : std_logic is sinal_controle(3);
-	alias beq : std_logic is sinal_controle(2);
-	alias tipoR : std_logic is sinal_controle(4);
+	signal selMuxRegSig : std_logic;
+	signal selMuxULARAM : std_logic;
+	signal beq : std_logic;
+	signal tipoR : std_logic;
 	
 	signal ULActrl : std_logic_vector(3 downto 0);
 	
 	signal RAMsaida : std_logic_vector (larguraDados-1 downto 0);
-	alias habEscritaRAM : std_logic is sinal_controle(0);
-	alias habLeituraRAM : std_logic is sinal_controle(1);
+	signal habEscritaRAM : std_logic;
+	signal habLeituraRAM : std_logic;
+	
+	signal entrada_hex0,entrada_hex1,entrada_hex2,entrada_hex3,entrada_hex4,entrada_hex5: std_logic_vector(6 downto 0);
+	
+	signal saida_mux_display: std_logic_vector(larguraDados-1 downto 0);
 	
 begin
 
@@ -137,11 +152,11 @@ begin
 					Dado_in => dadoLidoReg2,
 					we => habEscritaRAM,
 					re => habLeituraRAM,
-					habilita => 1,
+					habilita => '1',
 					Dado_out => RAMsaida);
 					 
 	MUX_RT_RD : entity work.muxGenerico2x1
-		generic map (larguraDados => larguraDados)
+		generic map (larguraDados => 5)
 		port map (entradaA_MUX => endRegRT,
                  entradaB_MUX => endRegRD,
                  seletor_MUX => selMuxRTRD,
@@ -190,5 +205,72 @@ begin
 					 funct => funct,
 					 tipoR => tipoR,
 					 ULActrl => ULActrl);
+					 
+	MUX_END_DISPLAY :  entity work.muxGenerico2x1 generic map (larguraDados => larguraDados)
+        	port map( entradaA_MUX => Endereco,
+                 entradaB_MUX =>  ULASaida,
+                 seletor_MUX => SW(9), 
+                 saida_MUX => saida_mux_display);
+					 
+	HEX_0 : entity work.displayHEX
+				 port map (	Data_IN => saida_mux_display(3 downto 0),
+								Entrada_HEX => entrada_hex0);
+	HEX_1 : entity work.displayHEX
+				 port map (	Data_IN => saida_mux_display(7 downto 4),
+								Entrada_HEX => entrada_hex1);
+	HEX_2 : entity work.displayHEX
+				 port map (	Data_IN => saida_mux_display(11 downto 8),
+								Entrada_HEX => entrada_hex2);
+	HEX_3 : entity work.displayHEX
+				 port map (	Data_IN => saida_mux_display(15 downto 12),
+								Entrada_HEX => entrada_hex3);
+	HEX_4 : entity work.displayHEX
+				 port map (	Data_IN => saida_mux_display(19 downto 16),
+								Entrada_HEX =>entrada_hex4 );
+	HEX_5 : entity work.displayHEX
+				 port map (	Data_IN => saida_mux_display(23 downto 20),
+								Entrada_HEX => entrada_hex5);
+
+	SigExtImShft  		<= SigExtIm(29 downto 0) & "00";
+	zeroANDbeq	  		<= beq and zero;
+	
+	opcode 		  		<= ROMsaida(31 downto 26);
+	endRegRS   	  		<= ROMsaida(25 downto 21);
+	endRegRT   	  		<= ROMsaida(20 downto 16);
+	endRegRD   	  		<= ROMsaida(15 downto 11);
+	shant 		  		<= ROMsaida(10 downto 6);
+	funct 		  		<= ROMsaida(5 downto 0);
+	
+	Imediato26 	 	 	<= ROMsaida(25 downto 0);
+	Imediato26Shft 	<= Imediato26 & "00";
+	
+	Imediato16 	  		<= ROMsaida(15 downto 0);
+	
+	entradaBMuxProxPC <= EndMais4(31 downto 28) & Imediato26Shft;
+	selMuxProxPC 		<= sinal_controle(8);
+	
+	selMuxRTRD 			<= sinal_controle(7);
+	habEscritaReg 		<= sinal_controle(6);
+	
+	selMuxRegSig 		<= sinal_controle(5);
+	selMuxULARAM 		<= sinal_controle(3);
+	beq 					<= sinal_controle(2);
+	tipoR 				<= sinal_controle(4);
+	
+	habEscritaRAM <= sinal_controle(0);
+	habLeituraRAM <= sinal_controle(1);
+	
+	HEX0 <= entrada_hex0;
+	HEX1 <= entrada_hex1;
+	HEX2 <= entrada_hex2;
+	HEX3 <= entrada_hex3;
+	HEX4 <= entrada_hex4;
+	HEX5 <= entrada_hex5;
+	
+	LEDR(3 downto 0) <= saida_mux_display(27 downto 24);
+	LEDR(7 downto 4) <= saida_mux_display(31 downto 28);
+	LEDR(8) <= habEscritaRAM;
+	LEDR(9) <= zero;
+	
 
 end architecture;
