@@ -21,7 +21,10 @@ entity mips is
 	 HEX2: out std_logic_vector(6 downto 0);
 	 HEX3: out std_logic_vector(6 downto 0);
 	 HEX4: out std_logic_vector(6 downto 0);
-	 HEX5: out std_logic_vector(6 downto 0)
+	 HEX5: out std_logic_vector(6 downto 0);
+	 
+	 saidaMUXDisplay : out std_logic_vector(larguraDados-1 downto 0);
+	 saidaROM : out std_logic_vector (larguraDados-1 downto 0)
   );
 end entity;
 
@@ -83,9 +86,9 @@ architecture arquitetura of mips is
 	signal habEscritaRAM : std_logic;
 	signal habLeituraRAM : std_logic;
 	
-	signal entrada_hex0,entrada_hex1,entrada_hex2,entrada_hex3,entrada_hex4,entrada_hex5: std_logic_vector(6 downto 0);
+	-- signal entrada_hex0,entrada_hex1,entrada_hex2,entrada_hex3,entrada_hex4,entrada_hex5: std_logic_vector(6 downto 0);
 	
-	signal saidaMUXDisplay: std_logic_vector(larguraDados-1 downto 0);
+	-- signal saidaMUXDisplay: std_logic_vector(larguraDados-1 downto 0);
 	
 begin
 
@@ -209,28 +212,29 @@ begin
 	MUX_DISPLAY :  entity work.muxGenerico2x1
 		generic map (larguraDados => larguraDados)
       port map( entradaA_MUX => Endereco,
-                entradaB_MUX => ULASaida,
+                entradaB_MUX => dadoEscritaReg3,
                 seletor_MUX => SW(0), 
                 saida_MUX => saidaMUXDisplay);
-					 
+	/*	 
 	HEX_0 : entity work.displayHEX
-				 port map (	Data_IN => saida_mux_display(3 downto 0),
+				 port map (	Data_IN => saidaMUXDisplay(3 downto 0),
 								Entrada_HEX => entrada_hex0);
 	HEX_1 : entity work.displayHEX
-				 port map (	Data_IN => saida_mux_display(7 downto 4),
+				 port map (	Data_IN => saidaMUXDisplay(7 downto 4),
 								Entrada_HEX => entrada_hex1);
 	HEX_2 : entity work.displayHEX
-				 port map (	Data_IN => saida_mux_display(11 downto 8),
+				 port map (	Data_IN => saidaMUXDisplay(11 downto 8),
 								Entrada_HEX => entrada_hex2);
 	HEX_3 : entity work.displayHEX
-				 port map (	Data_IN => saida_mux_display(15 downto 12),
+				 port map (	Data_IN => saidaMUXDisplay(15 downto 12),
 								Entrada_HEX => entrada_hex3);
 	HEX_4 : entity work.displayHEX
-				 port map (	Data_IN => saida_mux_display(19 downto 16),
+				 port map (	Data_IN => saidaMUXDisplay(19 downto 16),
 								Entrada_HEX =>entrada_hex4 );
 	HEX_5 : entity work.displayHEX
-				 port map (	Data_IN => saida_mux_display(23 downto 20),
+				 port map (	Data_IN => saidaMUXDisplay(23 downto 20),
 								Entrada_HEX => entrada_hex5);
+	*/
 
 	SigExtImShft  		<= SigExtIm(29 downto 0) & "00";
 	zeroANDbeq	  		<= beq and zero;
@@ -261,6 +265,9 @@ begin
 	habEscritaRAM <= sinal_controle(0);
 	habLeituraRAM <= sinal_controle(1);
 	
+	saidaROM <= ROMsaida;
+	
+	/*
 	HEX0 <= entrada_hex0;
 	HEX1 <= entrada_hex1;
 	HEX2 <= entrada_hex2;
@@ -268,9 +275,10 @@ begin
 	HEX4 <= entrada_hex4;
 	HEX5 <= entrada_hex5;
 	
+	
 	LEDR(3 downto 0) <= saidaMUXDisplay(27 downto 24);
 	LEDR(7 downto 4) <= saidaMUXDisplay(31 downto 28);
-
+	*/
 	
 
 end architecture;
