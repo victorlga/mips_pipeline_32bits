@@ -90,7 +90,6 @@ architecture arquitetura of mips is
 	
 	-- Define os sinais utilizados para testar o funcionamento da CPU.
 	signal entrada_hex0,entrada_hex1,entrada_hex2,entrada_hex3,entrada_hex4,entrada_hex5: std_logic_vector(6 downto 0);
-	signal saidaMUXDisplay: std_logic_vector(larguraDados-1 downto 0);
 	
 begin
 	-- Define o clock da CPU.
@@ -238,7 +237,7 @@ begin
                 entradaB_MUX => dadoEscritaReg3,
                 seletor_MUX => SW(0), 
                 saida_MUX => saidaMUXDisplay);
-	
+	/*
 	HEX_0 : entity work.displayHEX
 				 port map (	Data_IN => saidaMUXDisplay(3 downto 0),
 								Entrada_HEX => entrada_hex0);
@@ -256,7 +255,7 @@ begin
 								Entrada_HEX =>entrada_hex4 );
 	HEX_5 : entity work.displayHEX
 				 port map (	Data_IN => saidaMUXDisplay(23 downto 20),
-								Entrada_HEX => entrada_hex5);
+								Entrada_HEX => entrada_hex5);*/
 	-- Termina a definição das entidades utilizadas para testar o funcionamento da CPU.
 
 	-- Preenche os sinais da CPU com seus respectivos valores.
@@ -289,8 +288,8 @@ begin
 	habEscritaRAM <= sinal_controle(0);
 	habLeituraRAM <= sinal_controle(1);
 	
-	saidaROM <= ROMsaida;
-	
+
+	/*
 	
 	-- Preeche as saídas do top-level da CPU utilizadas para testar o funcionamento.
 	HEX0 <= entrada_hex0;
@@ -302,7 +301,7 @@ begin
 	
 	
 	LEDR(3 downto 0) <= saidaMUXDisplay(27 downto 24);
-	LEDR(7 downto 4) <= saidaMUXDisplay(31 downto 28);
+	LEDR(7 downto 4) <= saidaMUXDisplay(31 downto 28);*/
 
 
 end architecture;
