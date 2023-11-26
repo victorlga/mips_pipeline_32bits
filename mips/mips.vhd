@@ -34,9 +34,10 @@ architecture arquitetura of mips is
 
 	signal CLK : std_logic;														-- Define sinal de clock utilizado na CPU
 	
-	signal sinal_controle : std_logic_vector (8 downto 0);						-- Define o sinal de controle da CPU, após decodificar a instrução
+	signal sinal_controle : std_logic_vector (13 downto 0);						-- Define o sinal de controle da CPU, após decodificar a instrução
 	
 	signal proxEnd : std_logic_vector (larguraDados-1 downto 0);				-- Define o próximo endereço a ser executado
+	signal proxEndJR : std_logic_vector (larguraDados-1 downto 0);				
 	signal Endereco : std_logic_vector (larguraDados-1 downto 0);				-- Define o endereço atual
 	signal EndMais4 : std_logic_vector (larguraDados-1 downto 0);				-- Define o endereço atual + 4
 	signal EndMais4MaisImShft : std_logic_vector (larguraDados-1 downto 0);		-- Define o endereço atual + 4 + Imediato shiftado
@@ -69,7 +70,7 @@ architecture arquitetura of mips is
 	signal entradaBMuxProxPC : std_logic_vector (larguraDados-1 downto 0);		-- Define o sinal de entrada B do MUX do próximo endereço
 	signal selMuxProxPC : std_logic;											-- Define o sinal de seleção do MUX do próximo endereço
 	
-	signal selMuxRTRD : std_logic;												-- Define o sinal de seleção do MUX do registrador 3
+	signal selMuxRTRDRET : std_logic_vector(1 downto 0);					-- Define o sinal de seleção do MUX do registrador 3
 	signal habEscritaReg : std_logic;											-- Define o sinal de habilitação de escrita do registrador 3
 	
 	signal dadoEscritaReg3 : std_logic_vector (larguraDados-1 downto 0);		-- Define o sinal de dado de escrita do registrador 3
@@ -78,9 +79,11 @@ architecture arquitetura of mips is
 	signal entradaB_ULA : std_logic_vector (larguraDados-1 downto 0);			-- Define o sinal de entrada B da ULA
 	
 	signal selMuxRegSig : std_logic;											-- Define o sinal de seleção do MUX do registrador 2 e sinal extendido
-	signal selMuxULARAM : std_logic;											-- Define o sinal de seleção do MUX da ULA e RAM para ir para o registrador 3
+	signal selMuxEscreveReg3 : std_logic_vector(1 downto 0);											-- Define o sinal de seleção do MUX da ULA e RAM para ir para o registrador 3
 	signal beq : std_logic;														-- Define o sinal de beq que vem da decodificação da saida da ROM
+	signal bne : std_logic;														-- Define o sinal de bne que vem da decodificação da saida da ROM
 	signal tipoR : std_logic;													-- Define o sinal de tipoR que vem da decodificação da saida da ROM
+	signal saidaMUXbeq : std_logic;
 	
 	signal ULActrl : std_logic_vector(3 downto 0);								-- Define o sinal de controle da ULA
 	
@@ -88,9 +91,11 @@ architecture arquitetura of mips is
 	signal habEscritaRAM : std_logic;											-- Define o sinal de habilitação de escrita da RAM
 	signal habLeituraRAM : std_logic;											-- Define o sinal de habilitação de leitura da RAM
 	
+	signal sel_ORI_ANDI : std_logic;
+	signal selJR : std_logic;
+	
 	-- Define os sinais utilizados para testar o funcionamento da CPU.
 	signal entrada_hex0,entrada_hex1,entrada_hex2,entrada_hex3,entrada_hex4,entrada_hex5: std_logic_vector(6 downto 0);
-	signal saidaMUXDisplay: std_logic_vector(larguraDados-1 downto 0);
 	
 begin
 	-- Define o clock da CPU.
@@ -168,11 +173,13 @@ begin
 					Dado_out => RAMsaida);
 	
 	-- Define a entidade que implementa o MUX do registrador 3.
-	MUX_RT_RD : entity work.muxGenerico2x1
+	MUX_RT_RD_RET : entity work.muxGenerico4x1
 		generic map (larguraDados => 5)
 		port map (entradaA_MUX => endRegRT,
                  entradaB_MUX => endRegRD,
-                 seletor_MUX => selMuxRTRD,
+					  entradaC_MUX => 5x"1F",
+					  entradaD_MUX => 5x"0",
+                 seletor_MUX => selMuxRTRDRET,
                  saida_MUX => endReg3);
 	
 	-- Define a entidade que implementa o MUX que seleciona entre
@@ -195,11 +202,13 @@ begin
 	
 	-- Define a entidade que implementa o MUX que seleciona entre o
 	-- dado lido da RAM e a saída da ULA.
-	MUX_ULA_RAM : entity work.muxGenerico2x1
+	MUX_ESCREVE_REG_3 : entity work.muxGenerico4x1
 		generic map (larguraDados => larguraDados)
 		port map (entradaA_MUX => ULASaida,
                  entradaB_MUX => RAMsaida,
-                 seletor_MUX => selMuxULARAM,
+					  entradaC_MUX => EndMais4,
+					  entradaD_MUX => Imediato16 & 16x"0",
+                 seletor_MUX => selMuxEscreveReg3,
                  saida_MUX => dadoEscritaReg3);
 	
 	-- Define a entidade que implementa o MUX que seleciona entre a
@@ -210,18 +219,27 @@ begin
                  entradaB_MUX => entradaBMuxProxPC,
                  seletor_MUX => selMuxProxPC,
                  saida_MUX => proxEnd);
-	
+					  
+	MUX_PROX_PC_JR : entity work.muxGenerico2x1
+		generic map (larguraDados => larguraDados)
+		port map (entradaA_MUX => proxEnd,
+                 entradaB_MUX => dadoLidoReg1,
+                 seletor_MUX => selJR,
+                 saida_MUX => proxEndJR);
+					  
 	-- Define a entidade que implementa a extensão de sinal do
 	-- imediato de 16 bits.
 	ESTENDE_SIN_IM : entity work.estendeSinalGenerico
 		generic map (larguraDadoEntrada => 16,
 						 larguraDadoSaida => larguraDados)
 		port map(estendeSinal_IN => Imediato16,
+					sel_ORI_ANDI => sel_ORI_ANDI,
 					estendeSinal_OUT => SigExtIm);
 	
 	-- Define a entidade que implementa a unidade de controle de dados
 	UNID_CONTROLE_DADOS : entity work.unidadeControleDados
 		port map (opcode => opcode,
+					 funct => funct,
 					 sinal_controle => sinal_controle);
 
 	-- Define a entidade que implementa a unidade de controle da ULA
@@ -239,7 +257,7 @@ begin
                 seletor_MUX => SW(0), 
                 saida_MUX => saidaMUXDisplay);
 	
-	HEX_0 : entity work.displayHEX
+	/*HEX_0 : entity work.displayHEX
 				 port map (	Data_IN => saidaMUXDisplay(3 downto 0),
 								Entrada_HEX => entrada_hex0);
 	HEX_1 : entity work.displayHEX
@@ -256,12 +274,13 @@ begin
 								Entrada_HEX =>entrada_hex4 );
 	HEX_5 : entity work.displayHEX
 				 port map (	Data_IN => saidaMUXDisplay(23 downto 20),
-								Entrada_HEX => entrada_hex5);
+								Entrada_HEX => entrada_hex5);*/
 	-- Termina a definição das entidades utilizadas para testar o funcionamento da CPU.
 
+	
 	-- Preenche os sinais da CPU com seus respectivos valores.
 	SigExtImShft  		<= SigExtIm(29 downto 0) & "00";
-	zeroANDbeq	  		<= beq and zero;
+	zeroANDbeq	  		<= (beq or bne) and saidaMUXbeq;
 	
 	opcode 		  		<= ROMsaida(31 downto 26);
 	endRegRS   	  		<= ROMsaida(25 downto 21);
@@ -276,20 +295,23 @@ begin
 	Imediato16 	  		<= ROMsaida(15 downto 0);
 	
 	entradaBMuxProxPC <= EndMais4(31 downto 28) & Imediato26Shft;
-	selMuxProxPC 		<= sinal_controle(8);
 	
-	selMuxRTRD 			<= sinal_controle(7);
-	habEscritaReg 		<= sinal_controle(6);
 	
-	selMuxRegSig 		<= sinal_controle(5);
-	selMuxULARAM 		<= sinal_controle(3);
-	beq 					<= sinal_controle(2);
-	tipoR 				<= sinal_controle(4);
 	
-	habEscritaRAM <= sinal_controle(0);
-	habLeituraRAM <= sinal_controle(1);
+	habEscritaRAM 		 <= sinal_controle(0);
+	habLeituraRAM 		 <= sinal_controle(1);
+	bne			  		 <= sinal_controle(2);
+	beq 			  		 <= sinal_controle(3);
+	selMuxEscreveReg3  <= sinal_controle(5 downto 4);
+	tipoR 				 <= sinal_controle(6);
+	selMuxRegSig 		 <= sinal_controle(7);
+	habEscritaReg 		 <= sinal_controle(8);
+	sel_ORI_ANDI		 <= sinal_controle(9);
+	selMuxRTRDRET 		 <= sinal_controle(11 downto 10);
+	selMuxProxPC		 <= sinal_controle(12);
+	selJR					 <= sinal_controle(13);
 	
-	saidaROM <= ROMsaida;
+	saidaMUXbeq <= zero when beq = '1' else not zero;
 	
 	
 	-- Preeche as saídas do top-level da CPU utilizadas para testar o funcionamento.
