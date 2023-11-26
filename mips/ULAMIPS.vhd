@@ -364,7 +364,6 @@ architecture comportamento of ULAMIPS is
 	signal carry_in_31 : std_logic;
 	signal saida_intermed_MUX_A_31 : std_logic;
 	signal saida_intermed_MUX_B_31 : std_logic;
-	signal carry_out_31 : std_logic;
 	signal and_op_31 : std_logic;
 	signal or_op_31 : std_logic;
 	signal sum_sub_op_31 : std_logic;
