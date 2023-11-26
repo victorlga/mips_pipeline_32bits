@@ -85,7 +85,7 @@ architecture arquitetura of mips is
 	
 	signal entrada_hex0,entrada_hex1,entrada_hex2,entrada_hex3,entrada_hex4,entrada_hex5: std_logic_vector(6 downto 0);
 	
-	signal saida_mux_display: std_logic_vector(larguraDados-1 downto 0);
+	signal saidaMUXDisplay: std_logic_vector(larguraDados-1 downto 0);
 	
 begin
 
@@ -206,11 +206,12 @@ begin
 					 tipoR => tipoR,
 					 ULActrl => ULActrl);
 					 
-	MUX_END_DISPLAY :  entity work.muxGenerico2x1 generic map (larguraDados => larguraDados)
-        	port map( entradaA_MUX => Endereco,
-                 entradaB_MUX =>  ULASaida,
-                 seletor_MUX => SW(9), 
-                 saida_MUX => saida_mux_display);
+	MUX_DISPLAY :  entity work.muxGenerico2x1
+		generic map (larguraDados => larguraDados)
+      port map( entradaA_MUX => Endereco,
+                entradaB_MUX => ULASaida,
+                seletor_MUX => SW(0), 
+                saida_MUX => saidaMUXDisplay);
 					 
 	HEX_0 : entity work.displayHEX
 				 port map (	Data_IN => saida_mux_display(3 downto 0),
@@ -267,10 +268,9 @@ begin
 	HEX4 <= entrada_hex4;
 	HEX5 <= entrada_hex5;
 	
-	LEDR(3 downto 0) <= saida_mux_display(27 downto 24);
-	LEDR(7 downto 4) <= saida_mux_display(31 downto 28);
-	LEDR(8) <= habEscritaRAM;
-	LEDR(9) <= zero;
+	LEDR(3 downto 0) <= saidaMUXDisplay(27 downto 24);
+	LEDR(7 downto 4) <= saidaMUXDisplay(31 downto 28);
+
 	
 
 end architecture;
