@@ -10,7 +10,7 @@ TBD
 
 ## 3. RTL Viewer
 
-![RTL Viewer](RTL_Viewer.png)
+![RTL Viewer](RTLviewer.png)
 
 ## 4. Simulation
 
