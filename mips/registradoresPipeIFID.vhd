@@ -20,7 +20,7 @@ architecture comportamento of registradoresPipeIFID is
 			port map (DIN 		=> EndMais4_in,
 						 DOUT 	=> EndMais4_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		ROM_SAIDA : entity work.registradorGenerico
@@ -28,7 +28,7 @@ architecture comportamento of registradoresPipeIFID is
 			port map (DIN 		=> ROMsaida_in,
 						 DOUT 	=> ROMsaida_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 	
 end architecture;

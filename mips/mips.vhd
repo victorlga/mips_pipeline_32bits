@@ -23,7 +23,18 @@ entity mips is
     HEX2: out std_logic_vector(6 downto 0);
     HEX3: out std_logic_vector(6 downto 0);
     HEX4: out std_logic_vector(6 downto 0);
-    HEX5: out std_logic_vector(6 downto 0)
+    HEX5: out std_logic_vector(6 downto 0);
+	 
+	 control : out std_logic_vector(13 downto 0);
+	 proxEndeJR : out std_logic_vector (larguraDados-1 downto 0);
+	 proxEnde : out std_logic_vector (larguraDados-1 downto 0);
+	 opcode : out std_logic_vector (5 downto 0);
+	 funct : out std_logic_vector (5 downto 0);
+	 EndMais4 : out std_logic_vector (larguraDados-1 downto 0);
+	 saida_ROM : out std_logic_vector (larguraDados-1 downto 0);
+	 Endere : out std_logic_vector (larguraDados-1 downto 0);
+	 zero : out std_logic;
+	 escritaREG : out std_logic
   );
 end entity;
 
@@ -116,7 +127,6 @@ architecture arquitetura of mips is
 	signal dadoLidoReg2_out_1 : std_logic_vector (larguraDados-1 downto 0);			-- Define o sinal de dado lido do registrador 2
 	signal dadoLidoReg2_in_2 : std_logic_vector (larguraDados-1 downto 0);			-- Define o sinal de dado lido do registrador 2
 	signal dadoLidoReg2_out_2 : std_logic_vector (larguraDados-1 downto 0);			-- Define o sinal de dado lido do registrador 2
-
 
 
 	signal entradaB_ULA : std_logic_vector (larguraDados-1 downto 0);			-- Define o sinal de entrada B da ULA
@@ -234,7 +244,7 @@ begin
 	-- o endereço atual + 4 e o endereço atual + 4 + Imediato shiftado.
 	MUX_PC_SIGEXT : entity work.muxGenerico2x1
 		generic map (larguraDados => larguraDados)
-		port map (entradaA_MUX 	=> EndMais4_out_3,
+		port map (entradaA_MUX 	=> EndMais4_in_1,
                  entradaB_MUX => EndMais4MaisImShft_out,
                  seletor_MUX 	=> zeroANDbeq,
                  saida_MUX 	=> entradaAMuxProxPC);
@@ -395,14 +405,14 @@ begin
                 entradaB_MUX 	=> EndMais4_out_2,
 					 entradaC_MUX 	=> ULASaida_in_1,
 					 entradaD_MUX 	=> dadoEscritaReg3,
-                seletor_MUX 	=> SW(1) & SW(0), 
+                seletor_MUX 	=> SW(1) & SW(0),
                 saida_MUX 		=> saidaMUXDisplay);
 	
 	HEX_0 : entity work.displayHEX
-				 port map (	Data_IN => Endereco(3 downto 0),
+				 port map (	Data_IN => saidaMUXDisplay(3 downto 0),
 								Entrada_HEX => entrada_hex0);
 	HEX_1 : entity work.displayHEX
-				 port map (	Data_IN => Endereco(7 downto 4),
+				 port map (	Data_IN => saidaMUXDisplay(7 downto 4),
 								Entrada_HEX => entrada_hex1);
 	HEX_2 : entity work.displayHEX
 				 port map (	Data_IN => saidaMUXDisplay(11 downto 8),
@@ -481,9 +491,18 @@ begin
 	
 	LEDR(3 downto 0) <= saidaMUXDisplay(27 downto 24);
 	LEDR(7 downto 4) <= saidaMUXDisplay(31 downto 28);
-	
 	LEDR(8) <= habEscritaReg;
 	LEDR(9) <= zero_in;
 	
+	control <= sinal_controle_in_1;
+	proxEndeJR <= proxEndJR;
+	proxEnde <= proxEnd;
+	opcode <= opcode_in;
+	funct <= funct_in;
+	EndMais4 <= EndMais4_out_1;
+	saida_ROM <= ROMsaida_in;
+	Endere <= Endereco;
+	zero <= zero_in;
+	escritaREG <= habEscritaReg;
 	
 end architecture;

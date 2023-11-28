@@ -41,14 +41,14 @@ architecture comportamento of registradoresPipeEXMEM is
 			port map (DIN 		=> EndMais4_in,
 						 DOUT 	=> EndMais4_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		ZERO : entity work.FlipFlop 
 			port map (DIN 		=> zero_in,
 						 DOUT 	=> zero_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		DADO_REG_2 : entity work.registradorGenerico
@@ -56,7 +56,7 @@ architecture comportamento of registradoresPipeEXMEM is
 			port map (DIN 		=> dadoLidoReg2_in,
 						 DOUT 	=> dadoLidoReg2_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		ULA_SAIDA : entity work.registradorGenerico
@@ -64,7 +64,7 @@ architecture comportamento of registradoresPipeEXMEM is
 			port map (DIN 		=> ULASaida_in,
 						 DOUT 	=> ULASaida_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		
@@ -74,7 +74,7 @@ architecture comportamento of registradoresPipeEXMEM is
 			port map (DIN 		=> sinal_controle_in,
 						 DOUT 	=> sinal_controle_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		END_MAIS_4_IMED_SHFT : entity work.registradorGenerico
@@ -82,7 +82,7 @@ architecture comportamento of registradoresPipeEXMEM is
 			port map (DIN 		=> EndMais4MaisImShft_in,
 						 DOUT 	=> EndMais4MaisImShft_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		END_REG_3 : entity work.registradorGenerico
@@ -90,7 +90,7 @@ architecture comportamento of registradoresPipeEXMEM is
 			port map (DIN 		=> endReg3_in,
 						 DOUT 	=> endReg3_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		IMEDIATO_16 : entity work.registradorGenerico
@@ -98,7 +98,7 @@ architecture comportamento of registradoresPipeEXMEM is
 			port map (DIN 		=> Imediato16_in,
 						 DOUT 	=> Imediato16_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 end architecture;

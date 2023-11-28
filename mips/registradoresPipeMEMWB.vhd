@@ -35,7 +35,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			port map (DIN 		=> EndMais4_in,
 						 DOUT 	=> EndMais4_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 						 
@@ -45,7 +45,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			port map (DIN 		=> ULASaida_in,
 						 DOUT 	=> ULASaida_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 						 
@@ -54,7 +54,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			port map (DIN 		=> sinal_controle_in,
 						 DOUT 	=> sinal_controle_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		RAM_SAIDA : entity work.registradorGenerico
@@ -62,7 +62,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			port map (DIN 		=> RAMsaida_in,
 						 DOUT 	=> RAMsaida_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		END_REG_3 : entity work.registradorGenerico
@@ -70,7 +70,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			port map (DIN 		=> endReg3_in,
 						 DOUT 	=> endReg3_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		IMEDIATO_16 : entity work.registradorGenerico
@@ -78,7 +78,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			port map (DIN 		=> Imediato16_in,
 						 DOUT 	=> Imediato16_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 end architecture;

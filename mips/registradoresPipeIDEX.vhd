@@ -47,7 +47,7 @@ architecture comportamento of registradoresPipeIDEX is
 			port map (DIN 		=> EndMais4_in,
 						 DOUT 	=> EndMais4_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		DADO_REG_1 : entity work.registradorGenerico
@@ -55,7 +55,7 @@ architecture comportamento of registradoresPipeIDEX is
 			port map (DIN 		=> dadoLidoReg1_in,
 						 DOUT 	=> dadoLidoReg1_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		DADO_REG_2 : entity work.registradorGenerico
@@ -63,7 +63,7 @@ architecture comportamento of registradoresPipeIDEX is
 			port map (DIN 		=> dadoLidoReg2_in,
 						 DOUT 	=> dadoLidoReg2_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		SINAL_EXT_IMED : entity work.registradorGenerico
@@ -71,7 +71,7 @@ architecture comportamento of registradoresPipeIDEX is
 			port map (DIN 		=> SigExtIm_in,
 						 DOUT 	=> SigExtIm_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		END_REG_RT : entity work.registradorGenerico
@@ -79,7 +79,7 @@ architecture comportamento of registradoresPipeIDEX is
 			port map (DIN 		=> endRegRT_in,
 						 DOUT 	=> endRegRT_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		END_REG_RD : entity work.registradorGenerico
@@ -87,7 +87,7 @@ architecture comportamento of registradoresPipeIDEX is
 			port map (DIN 		=> endRegRD_in,
 						 DOUT 	=> endRegRD_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		SINAL_CONTROLE : entity work.registradorGenerico
@@ -95,7 +95,7 @@ architecture comportamento of registradoresPipeIDEX is
 			port map (DIN 		=> sinal_controle_in,
 						 DOUT 	=> sinal_controle_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		OPCODE : entity work.registradorGenerico
@@ -103,7 +103,7 @@ architecture comportamento of registradoresPipeIDEX is
 			port map (DIN 		=> opcode_in,
 						 DOUT 	=> opcode_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		FUNCT : entity work.registradorGenerico
@@ -111,7 +111,7 @@ architecture comportamento of registradoresPipeIDEX is
 			port map (DIN 		=> funct_in,
 						 DOUT 	=> funct_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 		IMEDIATO_16 : entity work.registradorGenerico
@@ -119,7 +119,7 @@ architecture comportamento of registradoresPipeIDEX is
 			port map (DIN 		=> Imediato16_in,
 						 DOUT 	=> Imediato16_out,
 						 ENABLE 	=> clk,
-						 CLK 		=> '1',
+						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
 end architecture;
