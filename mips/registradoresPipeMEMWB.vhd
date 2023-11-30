@@ -34,7 +34,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			generic map (larguraDados => larguraDados)
 			port map (DIN 		=> EndMais4_in,
 						 DOUT 	=> EndMais4_out,
-						 ENABLE 	=> clk,
+						 ENABLE 	=> '1',
 						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
@@ -44,7 +44,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			generic map (larguraDados => larguraDados)
 			port map (DIN 		=> ULASaida_in,
 						 DOUT 	=> ULASaida_out,
-						 ENABLE 	=> clk,
+						 ENABLE 	=> '1',
 						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
@@ -53,7 +53,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			generic map (larguraDados => 14)
 			port map (DIN 		=> sinal_controle_in,
 						 DOUT 	=> sinal_controle_out,
-						 ENABLE 	=> clk,
+						 ENABLE 	=> '1',
 						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
@@ -61,7 +61,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			generic map (larguraDados => larguraDados)
 			port map (DIN 		=> RAMsaida_in,
 						 DOUT 	=> RAMsaida_out,
-						 ENABLE 	=> clk,
+						 ENABLE 	=> '1',
 						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
@@ -69,7 +69,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			generic map (larguraDados => 5)
 			port map (DIN 		=> endReg3_in,
 						 DOUT 	=> endReg3_out,
-						 ENABLE 	=> clk,
+						 ENABLE 	=> '1',
 						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
@@ -77,7 +77,7 @@ architecture comportamento of registradoresPipeMEMWB is
 			generic map (larguraDados => 16)
 			port map (DIN 		=> Imediato16_in,
 						 DOUT 	=> Imediato16_out,
-						 ENABLE 	=> clk,
+						 ENABLE 	=> '1',
 						 CLK 		=> clk,
 						 RST 		=> '0');
 						 

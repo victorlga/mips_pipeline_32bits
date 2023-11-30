@@ -19,7 +19,7 @@ architecture comportamento of registradoresPipeIFID is
 			generic map (larguraDados => larguraDados)
 			port map (DIN 		=> EndMais4_in,
 						 DOUT 	=> EndMais4_out,
-						 ENABLE 	=> clk,
+						 ENABLE 	=> '1',
 						 CLK 		=> clk,
 						 RST 		=> '0');
 						 
@@ -27,7 +27,7 @@ architecture comportamento of registradoresPipeIFID is
 			generic map (larguraDados => larguraDados)
 			port map (DIN 		=> ROMsaida_in,
 						 DOUT 	=> ROMsaida_out,
-						 ENABLE 	=> clk,
+						 ENABLE 	=> '1',
 						 CLK 		=> clk,
 						 RST 		=> '0');
 	
