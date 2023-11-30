@@ -23,7 +23,7 @@ entity mips is
     HEX2: out std_logic_vector(6 downto 0);
     HEX3: out std_logic_vector(6 downto 0);
     HEX4: out std_logic_vector(6 downto 0);
-    HEX5: out std_logic_vector(6 downto 0);
+    HEX5: out std_logic_vector(6 downto 0)/*;
 	 
 	 control : out std_logic_vector(13 downto 0);
 	 proxEndeJR : out std_logic_vector (larguraDados-1 downto 0);
@@ -34,7 +34,7 @@ entity mips is
 	 saida_ROM : out std_logic_vector (larguraDados-1 downto 0);
 	 Endere : out std_logic_vector (larguraDados-1 downto 0);
 	 zero : out std_logic;
-	 escritaREG : out std_logic
+	 escritaREG : out std_logic*/
   );
 end entity;
 
@@ -399,13 +399,17 @@ begin
 					 
 				
 	-- Define as entidades utilizadas para testar o funcionamento da CPU.
-	MUX_DISPLAY :  entity work.muxGenerico4x1
+	MUX_DISPLAY :  entity work.muxGenerico8x1
 		generic map (larguraDados => larguraDados)
       port map( entradaA_MUX 	=> Endereco,
-                entradaB_MUX 	=> EndMais4_out_2,
+                entradaB_MUX 	=> x"000000" & "000" & endReg3_out_2,--proxEndJR,-- EndMais4_out_2,
 					 entradaC_MUX 	=> ULASaida_in_1,
-					 entradaD_MUX 	=> dadoEscritaReg3,
-                seletor_MUX 	=> SW(1) & SW(0),
+					 entradaD_MUX 	=> dadoLidoReg2_in_1,
+					 entradaE_MUX 	=> dadoLidoReg1_out, -- entrada A ULA
+					 entradaF_MUX 	=> entradaB_ULA,
+					 entradaG_MUX 	=> x"0000000" & ULActrl,
+					 entradaH_MUX 	=> dadoEscritaReg3,
+                seletor_MUX 	=> SW(2) & SW(1) & SW(0),
                 saida_MUX 		=> saidaMUXDisplay);
 	
 	HEX_0 : entity work.displayHEX
@@ -493,7 +497,7 @@ begin
 	LEDR(7 downto 4) <= saidaMUXDisplay(31 downto 28);
 	LEDR(8) <= habEscritaReg;
 	LEDR(9) <= zero_in;
-	
+	/*
 	control <= sinal_controle_in_1;
 	proxEndeJR <= proxEndJR;
 	proxEnde <= proxEnd;
@@ -503,6 +507,6 @@ begin
 	saida_ROM <= ROMsaida_in;
 	Endere <= Endereco;
 	zero <= zero_in;
-	escritaREG <= habEscritaReg;
+	escritaREG <= habEscritaReg;*/
 	
 end architecture;
