@@ -3,10 +3,10 @@ use ieee.std_logic_1164.all;
 
 -- Definição da entidade MIPS com parâmetros genéricos e portas de I/O.
 entity mips is
-  generic (
-    larguraDados : natural := 32;  -- Define a largura dos dados manipulados.
-    simulacao : boolean := TRUE  -- Alterar para FALSE para gravação em placa.
-  );
+	generic (
+	  larguraDados : natural := 32;  -- Define a largura dos dados manipulados.
+	  simulacao : boolean := TRUE  -- Alterar para FALSE para gravação em placa.
+	);
   port   (
     CLOCK_50 : in std_logic;  -- Clock de entrada de 50 MHz.
 	 
