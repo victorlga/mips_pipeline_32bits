@@ -291,4 +291,7 @@ set_global_assignment -name VHDL_FILE bancoRegGenerico.vhd
 set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
 set_global_assignment -name VHDL_FILE muxGenerico4x1.vhd
 set_global_assignment -name VHDL_FILE idBlock.vhd
+set_global_assignment -name VHDL_FILE output_files/exBlock.vhd
+set_global_assignment -name AUTO_RAM_RECOGNITION ON
+set_global_assignment -name VHDL_FILE memBlock.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
