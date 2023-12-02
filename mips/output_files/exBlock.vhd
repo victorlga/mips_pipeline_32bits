@@ -24,7 +24,9 @@ entity exBlock is
 			 
 			 dadoLidoReg2			: in std_logic_vector(larguraDados-1 downto 0);
 			 
-			 sinal_controle		: in std_logic_vector(13 downto 0)
+			 sinal_controle		: in std_logic_vector(13 downto 0);
+			 
+			 zero						: out std_logic
 			 
 			 );
 end entity;
@@ -33,7 +35,7 @@ architecture arquitetura of exBlock is
 
 		signal SigExtImShft 	: std_logic_vector (larguraDados-1 downto 0);			-- Define o sinal de extensão de sinal do imediato shiftado
 		signal ULActrl 		: std_logic_vector(3 downto 0);								-- Define o sinal de controle da ULA
-		signal zero 			: std_logic;
+		signal zero_local		: std_logic;
 		signal entradaB_ULA	: std_logic_vector(larguraDados-1 downto 0);
 		
 		signal beq				: std_logic;
@@ -75,7 +77,7 @@ architecture arquitetura of exBlock is
 			port map (entradaA => dadoLidoReg1,
 						 entradaB => entradaB_ULA,
 						 saida => ULASaida,
-						 zero => zero,
+						 zero => zero_local,
 						 seletor => ULActrl);
 						 
 		-- Define a entidade que implementa o MUX que seleciona entre o 
@@ -95,7 +97,9 @@ architecture arquitetura of exBlock is
 		selMuxRegSig 		 <= sinal_controle(7);
 	
 		SigExtImShft  		<= SigExtIm(29 downto 0) & "00";
-		saidaMUXbeq 		<= zero when beq = '1' else not zero;
+		saidaMUXbeq 		<= zero_local when beq = '1' else not zero_local;
 		beqORbne				<= beq or bne;
+		
+		zero <= zero_local;
 		
 end architecture;
