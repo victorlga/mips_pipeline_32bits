@@ -22,11 +22,19 @@ architecture comportamento of unidadeControleULA is
 	 constant SLT : std_logic_vector(5 downto 0) := 6x"2a";
 	 constant NORR: std_logic_vector(5 downto 0) := 6x"27";
 	 
-	 constant LW  : std_logic_vector(5 downto 0) := "100011";
-	 constant SW  : std_logic_vector(5 downto 0) := "101011";
-	 constant BEQ : std_logic_vector(5 downto 0) := "000100";
+	 constant LW  : std_logic_vector(5 downto 0) := 6x"23";
+	 constant SW  : std_logic_vector(5 downto 0) := 6x"2b";
+	 constant BEQ : std_logic_vector(5 downto 0) := 6x"4";
+	 constant BNE : std_logic_vector(5 downto 0) := 6x"5";
 	 
-	 constant JMP : std_logic_vector(5 downto 0) := "000010";
+	 constant ADDI: std_logic_vector(5 downto 0) := 6x"8";
+	 constant ORI : std_logic_vector(5 downto 0) := 6x"d";
+	 constant ANDI: std_logic_vector(5 downto 0) := 6x"c";
+	 constant LUI : std_logic_vector(5 downto 0) := 6x"f";
+	 constant SLTI: std_logic_vector(5 downto 0) := 6x"a";
+	 
+	 constant JMP : std_logic_vector(5 downto 0) := 6x"2";
+	 constant JAL : std_logic_vector(5 downto 0) := 6x"3";
 	 
     begin
 			
@@ -41,7 +49,14 @@ architecture comportamento of unidadeControleULA is
 			opcode_dec <= "0010" when opcode = LW  else
 							  "0010" when opcode = SW  else
 							  "0110" when opcode = BEQ else
+							  "0110" when opcode = BNE else
 							  "0000" when opcode = JMP else
+							  "0000" when opcode = JAL else
+							  "0010" when opcode = ADDI else
+							  "0001" when opcode = ORI else
+							  "0000" when opcode = ANDI else
+							  "0000" when opcode = LUI else
+							  "0111" when opcode = SLTI else
 							  "0000";
 			
 			ULActrl <= funct_dec when (tipoR = '1') else opcode_dec;
